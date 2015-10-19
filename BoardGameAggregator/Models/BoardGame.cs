@@ -19,5 +19,7 @@ namespace BoardGameAggregator.Models
 
         public string Comments { get; set; }
 
+        public BoardGameGeekInfo Info { get; set; }
+
     }
 }

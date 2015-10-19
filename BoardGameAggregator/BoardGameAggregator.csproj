@@ -138,12 +138,27 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BoardGameGeekInfoesController.cs" />
     <Compile Include="Controllers\BoardGamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510192005016_InitialCreate.cs" />
+    <Compile Include="Migrations\201510192005016_InitialCreate.Designer.cs">
+      <DependentUpon>201510192005016_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510192021133_AddBGGInfo.cs" />
+    <Compile Include="Migrations\201510192021133_AddBGGInfo.Designer.cs">
+      <DependentUpon>201510192021133_AddBGGInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510192025146_ChangeBGGLinkType.cs" />
+    <Compile Include="Migrations\201510192025146_ChangeBGGLinkType.Designer.cs">
+      <DependentUpon>201510192025146_ChangeBGGLinkType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BoardGame.cs" />
+    <Compile Include="Models\BoardGameGeekInfo.cs" />
     <Compile Include="Models\SystemContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -187,6 +202,11 @@
     <Content Include="Views\BoardGames\Details.cshtml" />
     <Content Include="Views\BoardGames\Edit.cshtml" />
     <Content Include="Views\BoardGames\Index.cshtml" />
+    <Content Include="Views\BoardGameGeekInfoes\Create.cshtml" />
+    <Content Include="Views\BoardGameGeekInfoes\Delete.cshtml" />
+    <Content Include="Views\BoardGameGeekInfoes\Details.cshtml" />
+    <Content Include="Views\BoardGameGeekInfoes\Edit.cshtml" />
+    <Content Include="Views\BoardGameGeekInfoes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -198,6 +218,17 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201510192005016_InitialCreate.resx">
+      <DependentUpon>201510192005016_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510192021133_AddBGGInfo.resx">
+      <DependentUpon>201510192021133_AddBGGInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510192025146_ChangeBGGLinkType.resx">
+      <DependentUpon>201510192025146_ChangeBGGLinkType.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
