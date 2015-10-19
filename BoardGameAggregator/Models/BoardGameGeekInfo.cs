@@ -14,7 +14,11 @@ namespace BoardGameAggregator.Models
 
         public string Name { get; set; }
 
-        public int NumPlayers { get; set; }
+        public string Description { get; set; }
+
+        public int MinPlayers { get; set; }
+
+        public int MaxPlayers { get; set; }
 
         public int Rank { get; set; }
 
@@ -22,9 +26,13 @@ namespace BoardGameAggregator.Models
 
         public long NumRatings { get; set; }
 
-        public string PlayingTime { get; set; }
+        public int MinPlayingTime { get; set; }
+
+        public int MaxPlayingTime { get; set; }
 
         public string Link { get; set; }
+
+        public string ImageLink { get; set; }
 
         [Required]
         public BoardGame BoardGame { get; set; }

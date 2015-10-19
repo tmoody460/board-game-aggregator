@@ -156,6 +156,10 @@
     <Compile Include="Migrations\201510192025146_ChangeBGGLinkType.Designer.cs">
       <DependentUpon>201510192025146_ChangeBGGLinkType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510192210395_ChangeBggInfoToMatchBggBetter.cs" />
+    <Compile Include="Migrations\201510192210395_ChangeBggInfoToMatchBggBetter.Designer.cs">
+      <DependentUpon>201510192210395_ChangeBggInfoToMatchBggBetter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BoardGame.cs" />
     <Compile Include="Models\BoardGameGeekInfo.cs" />
@@ -207,6 +211,7 @@
     <Content Include="Views\BoardGameGeekInfoes\Details.cshtml" />
     <Content Include="Views\BoardGameGeekInfoes\Edit.cshtml" />
     <Content Include="Views\BoardGameGeekInfoes\Index.cshtml" />
+    <Content Include="Views\BoardGameGeekInfoes\LookupGame.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -228,6 +233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510192025146_ChangeBGGLinkType.resx">
       <DependentUpon>201510192025146_ChangeBGGLinkType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510192210395_ChangeBggInfoToMatchBggBetter.resx">
+      <DependentUpon>201510192210395_ChangeBggInfoToMatchBggBetter.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
