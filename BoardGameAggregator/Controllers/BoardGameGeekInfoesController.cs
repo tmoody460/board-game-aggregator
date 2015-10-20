@@ -71,7 +71,7 @@ namespace BoardGameAggregator.Controllers
                 boardGameGeekInfo.Link = "https://boardgamegeek.com/boardgame/" + foundId;
 
                 boardGameGeekInfo.Description = gameNode.SelectSingleNode("description").InnerText;
-                boardGameGeekInfo.ImageLink = gameNode.SelectSingleNode("thumbnail").InnerText.Substring(2);
+                boardGameGeekInfo.ImageLink = gameNode.SelectSingleNode("thumbnail").InnerText;
                 boardGameGeekInfo.MinPlayers = Convert.ToInt32(gameNode.SelectSingleNode("minplayers").InnerText);
                 boardGameGeekInfo.MaxPlayers = Convert.ToInt32(gameNode.SelectSingleNode("maxplayers").InnerText);
                 boardGameGeekInfo.MinPlayingTime = Convert.ToInt32(gameNode.SelectSingleNode("minplaytime").InnerText);

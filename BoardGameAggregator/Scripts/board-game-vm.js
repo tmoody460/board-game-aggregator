@@ -1,6 +1,7 @@
 ﻿function BoardGame(id, customName, played, owned, customRating, comments, bggName, descripion, minPlayers, 
-    maxPlayers, rank, rating, numRatings, minPlayingTime, maxPlayingTime, bggLink, imageLink) {
+    maxPlayers, rank, rating, numRatings, minPlayingTime, maxPlayingTime, bggLink, imageLink, parent) {
     var self = this;
+    var parent = parent;
 
     self.id = ko.observable(id ? id : -1);
     self.customName = ko.observable(customName);
@@ -19,12 +20,30 @@
     self.maxPlayingTime = ko.observable(maxPlayingTime);
     self.bggLink = ko.observable(bggLink);
     self.imageLink = ko.observable(imageLink);
+
+    self.viewGame = function()
+    {
+        parent.viewOnly(true);
+        parent.detailsGame(self);
+        $('#detailsModal').modal('show');
+    }
+
+    self.editGame = function () {
+        parent.viewOnly(false);
+        $('#detailsModal').modal('show');
+    }
+
+    self.deleteGame = function () {
+        console.log("Delete");
+    }
 }
 
 function AppViewModel() {
     var self = this;
 
     self.boardGames = ko.observableArray([]);
+    self.viewOnly = ko.observable(true);
+    self.detailsGame = ko.observable(null);
 
     function loadGames(){
         console.log("Loading...");
@@ -40,7 +59,7 @@ function AppViewModel() {
                     var game = new BoardGame(game.Id, game.Name, game.Played, game.Owned, game.Rating, game.Comments,
                         game.Info.Name, game.Info.Description, game.Info.MinPlayers, game.Info.MaxPlayers, game.Info.Rank,
                         game.Info.Rating, game.Info.NumRatings, game.Info.MinPlayingTime, game.Info.MaxPlayingTime,
-                        game.Info.Link, game.Info.ImageLink);
+                        game.Info.Link, game.Info.ImageLink, self);
 
                     self.boardGames.push(game);
                 });               
