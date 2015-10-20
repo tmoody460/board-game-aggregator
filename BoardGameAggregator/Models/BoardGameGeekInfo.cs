@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
 
 namespace BoardGameAggregator.Models
 {
@@ -35,6 +36,7 @@ namespace BoardGameAggregator.Models
         public string ImageLink { get; set; }
 
         [Required]
+        [ScriptIgnore]
         public BoardGame BoardGame { get; set; }
 
     }

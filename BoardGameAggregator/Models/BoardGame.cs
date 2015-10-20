@@ -17,6 +17,8 @@ namespace BoardGameAggregator.Models
         
         public bool Owned { get; set;  }
 
+        public double Rating { get; set; }
+
         public string Comments { get; set; }
 
         public BoardGameGeekInfo Info { get; set; }
