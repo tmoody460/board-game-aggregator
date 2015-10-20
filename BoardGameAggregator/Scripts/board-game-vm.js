@@ -36,10 +36,18 @@ function AppViewModel() {
             dataType: "json",
             success: function (data) {
                 console.log("Success!");
-                console.log(data);
+                var games = $.map(data, function (game, i) {
+                    var game = new BoardGame(game.Id, game.Name, game.Played, game.Owned, game.Rating, game.Comments,
+                        game.Info.Name, game.Info.Description, game.Info.MinPlayers, game.Info.MaxPlayers, game.Info.Rank,
+                        game.Info.Rating, game.Info.NumRatings, game.Info.MinPlayingTime, game.Info.MaxPlayingTime,
+                        game.Info.Link, game.Info.ImageLink);
+
+                    self.boardGames.push(game);
+                });               
             },
-            error: function () {
-                console.log("Failure.")
+            error: function (error) {
+                console.log("Failure.");
+                console.log(error);
             }
         });
     }

@@ -5,17 +5,41 @@
 
 <table class="table table-striped">
     <tr>
-        <th>1</th>
-        <th>2</th>
-        <th>3</th>
-        <th>4</th>
-        <th>5</th>
+        <th>customName</th>
+        <th>played</th>
+        <th>owned</th>
+        <th>customRating</th>
+        <th>comments</th>
+        <th>bggName</th>
+        <th>descripion</th>
+        <th>minPlayers</th>
+        <th>maxPlayers</th>
+        <th>rank</th>
+        <th>rating</th>
+        <th>numRatings</th>
+        <th>minPlayingTime</th>
+        <th>maxPlayingTime</th>
+        <th>bggLink</th>
+        <th>imageLink</th>
     </tr>
+    <!-- ko foreach: boardGames -->
     <tr>
-        <td>1</td>
-        <td>2</td>
-        <td>3</td>
-        <td>4</td>
-        <td>5</td>
+        <td data-bind="text: customName"></td>
+        <td data-bind="text: played"></td>
+        <td data-bind="text: owned"></td>
+        <td data-bind="text: customRating"></td>
+        <td data-bind="text: comments"></td>
+        <td data-bind="text: bggName"></td>
+        <td data-bind="text: descripion"></td>
+        <td data-bind="text: minPlayers"></td>
+        <td data-bind="text: maxPlayers"></td>
+        <td data-bind="text: rank"></td>
+        <td data-bind="text: rating"></td>
+        <td data-bind="text: numRatings"></td>
+        <td data-bind="text: minPlayingTime"></td>
+        <td data-bind="text: maxPlayingTime"></td>
+        <td data-bind="text: bggLink"></td>
+        <td data-bind="text: imageLink"></td>
     </tr>
+    <!-- /ko -->
 </table>
