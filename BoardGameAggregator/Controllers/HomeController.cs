@@ -2,6 +2,7 @@
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,20 +18,6 @@ namespace BoardGameAggregator.Controllers
             return View();
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
         public JsonResult GetBoardGames(int page)
         {
             int pageSize = 10;
@@ -38,6 +25,30 @@ namespace BoardGameAggregator.Controllers
             var games = db.BoardGames.Include("Info").OrderBy(g => g.Name).ToPagedList(page, pageSize);
 
             return Json(games, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult SaveGame(BoardGame game)
+        {
+            db.Entry(game).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Json(true);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteGame(Guid id)
+        {
+            var game = db.BoardGames.Find(id);
+            db.Entry(game).Reference(p => p.Info).Load();
+
+            var bggInfo = db.BoardGameGeekInfoes.Find(game.Info.Id);
+
+            db.BoardGameGeekInfoes.Remove(bggInfo);
+            db.BoardGames.Remove(game);
+            db.SaveChanges();
+
+            return Json(true);
         }
     }
 }

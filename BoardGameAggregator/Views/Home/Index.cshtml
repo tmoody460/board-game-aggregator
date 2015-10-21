@@ -44,20 +44,74 @@
     <!-- /ko -->
 </table>
 
-<div class="modal fade" id="detailsModal">
+<!-- ko with: detailsGame -->
+<div class="modal fade" id="editModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" data-bind="text: detailsGame() ? detailsGame().bggName : ''"></h4>
+                <h4 class="modal-title" data-bind="text: bggName"></h4>
             </div>
             <div class="modal-body">
-                <p>One fine body&hellip;</p>
+                <form>
+                    <div class="form-group">
+                        <label>Custom Name</label>
+                        <input class="form-control" data-bind="value: customName">
+                    </div>
+                    <div class="form-group">
+                        <label>Custom Rating</label>
+                        <input class="form-control" data-bind="value: customRating">
+                    </div>
+                    <div class="form-group">
+                        <label>Comments</label>
+                        <textarea class="form-control" data-bind="value: comments" rows="5"></textarea>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+<!-- /ko -->
+
+<!-- ko with: detailsGame -->
+<div class="modal fade" id="detailsModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" data-bind="text: bggName"></h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <a data-bind="attr: { href: bggLink }">Visit Board Game Geek</a>
+                    <a data-bind="attr: { href: redditLink }">Search /r/boardgames</a>
+                    <div>
+                        <label>Custom Name</label>
+                        <p data-bind="text: customName"></p>
+                    </div>
+                    <div>
+                        <label>Custom Rating</label>
+                        <p data-bind="text: customRating"></p>
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <p data-bind="html: description"></p>
+                    </div>
+                    <!-- ko if: comments-->
+                    <div>
+                        <label>Comments</label>
+                        <p data-bind="text: comments"></p>
+                    </div>
+                    <!-- /ko -->
+                    <a data-bind="attr: { href: bggLink }">Visit Board Game Geek</a>
+                    <a data-bind="attr: { href: redditLink }">Search /r/boardgames</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- /ko -->

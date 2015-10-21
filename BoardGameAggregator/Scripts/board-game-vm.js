@@ -1,4 +1,4 @@
-﻿function BoardGame(id, customName, played, owned, customRating, comments, bggName, descripion, minPlayers, 
+﻿function BoardGame(id, customName, played, owned, customRating, comments, bggName, description, minPlayers, 
     maxPlayers, rank, rating, numRatings, minPlayingTime, maxPlayingTime, bggLink, imageLink, parent) {
     var self = this;
     var parent = parent;
@@ -10,7 +10,7 @@
     self.customRating = ko.observable(customRating);
     self.comments = ko.observable(comments);
     self.bggName = ko.observable(bggName);
-    self.descripion = ko.observable(descripion);
+    self.description = ko.observable(description);
     self.minPlayers = ko.observable(minPlayers);
     self.maxPlayers = ko.observable(maxPlayers);
     self.rank = ko.observable(rank);
@@ -20,29 +20,50 @@
     self.maxPlayingTime = ko.observable(maxPlayingTime);
     self.bggLink = ko.observable(bggLink);
     self.imageLink = ko.observable(imageLink);
+    self.redditLink = "https://www.reddit.com/r/boardgames/search?q=" + self.bggName() + "&restrict_sr=on";
 
     self.viewGame = function()
     {
-        parent.viewOnly(true);
         parent.detailsGame(self);
         $('#detailsModal').modal('show');
     }
 
     self.editGame = function () {
-        parent.viewOnly(false);
-        $('#detailsModal').modal('show');
+        parent.detailsGame(self);
+        $('#editModal').modal('show');
     }
 
     self.deleteGame = function () {
-        console.log("Delete");
+        $.ajax({
+            url: '/Home/DeleteGame',
+            type: 'POST',
+            data: { "id": self.id },
+            dataType: "json",
+            success: function (data) { parent.boardGames.remove(function (item) { return item.id() == self.id() }) },
+            error: function (error) { console.log(error); }
+        });
     }
+
+    ko.computed(function () {
+        var game = {
+            Id: self.id, Name: self.customName, Rating: self.customRating, Played: self.played, Owned: self.owned,
+            Comments: self.comments
+        }
+        $.ajax({
+            url: '/Home/SaveGame',
+            type: 'POST',
+            data: { "game": game },
+            dataType: "json",
+            success: function (data) { console.log("Saved."); },
+            error: function(error) { console.log(error); }
+        });
+    }, this).extend({ throttle: 1000 });
 }
 
 function AppViewModel() {
     var self = this;
 
     self.boardGames = ko.observableArray([]);
-    self.viewOnly = ko.observable(true);
     self.detailsGame = ko.observable(null);
 
     function loadGames(){
