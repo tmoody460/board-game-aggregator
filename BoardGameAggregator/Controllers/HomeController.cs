@@ -1,4 +1,5 @@
-﻿using BoardGameAggregator.Models;
+﻿using BoardGameAggregator.Managers;
+using BoardGameAggregator.Models;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -49,6 +50,40 @@ namespace BoardGameAggregator.Controllers
             db.SaveChanges();
 
             return Json(true);
+        }
+
+        public JsonResult LookUpGame(string name)
+        {
+            BoardGameGeekInfo gameInfo = null;
+            BoardGame game = new BoardGame();
+
+            try
+            {
+                BoardGameGeekInfoManager manager = new BoardGameGeekInfoManager();
+                gameInfo = manager.LookUpBoardGame(name);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+
+            // Unless custom name is set, use BGG's
+            game.Name = gameInfo.Name;
+            game.Id = Guid.NewGuid();
+            game.Rating = 0;
+            game.Played = false;
+            game.Owned = false;
+            game.Comments = "";
+            game.Info = gameInfo;
+
+            gameInfo.Id = Guid.NewGuid();
+            gameInfo.BoardGame = game;
+
+            db.BoardGames.Add(game);
+            db.BoardGameGeekInfoes.Add(gameInfo);
+            db.SaveChanges();
+
+            return Json(game, JsonRequestBehavior.AllowGet);
         }
     }
 }

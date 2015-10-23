@@ -87,6 +87,8 @@ namespace BoardGameAggregator.Controllers
             else
             {
                 // TODO: Handle game not found
+                ViewBag.Error = "Game not found.";
+                return View("LookupGame");
             }
 
             game.Id = Guid.NewGuid();
@@ -239,6 +241,13 @@ namespace BoardGameAggregator.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public JsonResult GetRelatedGames(string game)
+        {
+
+
+            return Json("");
         }
     }
 }

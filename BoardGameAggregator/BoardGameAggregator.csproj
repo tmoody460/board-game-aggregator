@@ -149,9 +149,13 @@
     <Compile Include="Controllers\BoardGameGeekInfoesController.cs" />
     <Compile Include="Controllers\BoardGamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Engines\BoardGameGeekEngine.cs" />
+    <Compile Include="Engines\RestApiEngine.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Managers\BoardGameGeekInfoManager.cs" />
+    <Compile Include="Managers\BoardGameManager.cs" />
     <Compile Include="Migrations\201510192005016_InitialCreate.cs" />
     <Compile Include="Migrations\201510192005016_InitialCreate.Designer.cs">
       <DependentUpon>201510192005016_InitialCreate.cs</DependentUpon>

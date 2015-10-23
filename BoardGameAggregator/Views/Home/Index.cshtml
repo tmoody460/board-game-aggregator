@@ -3,6 +3,10 @@
     <script src="@Url.Content("~/Scripts/board-game-vm.js")"></script>
 }
 
+
+<input data-bind="value: searchName"/>
+<button data-bind="click: lookUpGame" >Click!</button>
+
 <table class="table table-striped">
     <tr>
         <th></th>
@@ -106,10 +110,30 @@
                     <!-- /ko -->
                     <a data-bind="attr: { href: bggLink }">Visit Board Game Geek</a>
                     <a data-bind="attr: { href: redditLink }">Search /r/boardgames</a>
+
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- /ko -->
+
+<!-- ko with: detailsGame -->
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" data-bind="text: bggName"></h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this game?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" data-bind="click: deleteGameConfirmed">Confirm</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

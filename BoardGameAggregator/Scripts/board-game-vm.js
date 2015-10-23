@@ -34,6 +34,11 @@
     }
 
     self.deleteGame = function () {
+        parent.detailsGame(self);
+        $('#deleteModal').modal('show');
+    }
+
+    self.deleteGameConfirmed = function () {
         $.ajax({
             url: '/Home/DeleteGame',
             type: 'POST',
@@ -65,8 +70,35 @@ function AppViewModel() {
 
     self.boardGames = ko.observableArray([]);
     self.detailsGame = ko.observable(null);
+    self.searchName = ko.observable("");
 
-    function loadGames(){
+    self.lookUpGame = function () {
+        $.ajax({
+            url: '/Home/LookUpGame',
+            type: "GET",
+            data: { "name": self.searchName() },
+            dataType: "json",
+            success: function (data) {
+                if (!data.Id)
+                {
+                    // Error message
+                    console.log(data);
+                } else {
+                    // Valid data
+                    var game = new BoardGame(data.Id, data.Name, data.Played, data.Owned, data.Rating, data.Comments,
+                        data.Info.Name, data.Info.Description, data.Info.MinPlayers, data.Info.MaxPlayers, data.Info.Rank,
+                        data.Info.Rating, data.Info.NumRatings, data.Info.MinPlayingTime, data.Info.MaxPlayingTime,
+                        data.Info.Link, data.Info.ImageLink, self);
+                    self.boardGames.push(game);
+                }                
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    self.loadGames = function(){
         console.log("Loading...");
 
         $.ajax({
@@ -92,7 +124,7 @@ function AppViewModel() {
         });
     }
 
-    loadGames();
+    self.loadGames();
 
 }
 
