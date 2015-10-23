@@ -8,3 +8,12 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+
+.searchbar{
+    padding: 10px;
+}
+
+.searchbar input{
+    width: 30%;
+    display: inline;
+}

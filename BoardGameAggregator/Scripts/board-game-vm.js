@@ -70,7 +70,34 @@ function AppViewModel() {
 
     self.boardGames = ko.observableArray([]);
     self.detailsGame = ko.observable(null);
+
     self.searchName = ko.observable("");
+    self.searchResults = ko.observableArray([]);
+
+    self.addGame = function (game) {
+        $.ajax({
+            url: '/Home/AddGame',
+            type: 'POST',
+            data: { "id": game.id },
+            dataType: "json",
+            success: function (data) {
+
+                if (!data.Id) {
+                    // Error message
+                    console.log(data);
+                } else {
+                    // Valid data
+                    var game = new BoardGame(data.Id, data.Name, data.Played, data.Owned, data.Rating, data.Comments,
+                        data.Info.Name, data.Info.Description, data.Info.MinPlayers, data.Info.MaxPlayers, data.Info.Rank,
+                        data.Info.Rating, data.Info.NumRatings, data.Info.MinPlayingTime, data.Info.MaxPlayingTime,
+                        data.Info.Link, data.Info.ImageLink, self);
+                    self.boardGames.push(game);
+                }
+
+            },
+            error: function (error) { console.log(error); }
+        });
+    }
 
     self.lookUpGame = function () {
         $.ajax({
@@ -94,6 +121,26 @@ function AppViewModel() {
             },
             error: function (error) {
                 console.log(error);
+            }
+        });
+    }
+
+    self.lookUpGameList = function () {
+        $.ajax({
+            url: '/Home/LookUpGameList',
+            type: "GET",
+            data: { "name": self.searchName() },
+            dataType: "json",
+            success: function (data) {
+                self.searchResults.removeAll();
+                var results = $.map(data, function (name, id) {
+                    self.searchResults.push({ "name": name, "id": id });
+                });
+                console.log(self.searchResults());
+                $('#resultsModal').modal('show');
+            },
+            error: function (error) {
+                console.log(error.responseText);
             }
         });
     }

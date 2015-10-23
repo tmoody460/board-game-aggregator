@@ -13,6 +13,28 @@ namespace BoardGameAggregator.Managers
     public class BoardGameGeekInfoManager
     {
 
+        public Dictionary<string, string> LookupBoardGameList(string name)
+        {
+            Dictionary<string, string> games = new Dictionary<string, string>();
+
+            XmlNodeList list = BoardGameGeekEngine.RequestSearchResults(name);
+
+            foreach (XmlNode game in list)
+            {
+                XmlNodeList nameNodes = game.SelectNodes("name");
+                for (var i = 0; i < nameNodes.Count; i++)
+                {
+                    XmlNode node = nameNodes[i];
+                    if (node.Attributes["primary"] != null && node.Attributes["primary"].Value == "true")
+                    {
+                        games.Add(game.Attributes["objectid"].Value, node.InnerText);
+                    }
+                }
+            }
+
+            return games;
+        }
+
         public BoardGameGeekInfo LookUpBoardGame(string name)
         {
             XmlNodeList list = BoardGameGeekEngine.RequestSearchResults(name);
@@ -29,9 +51,14 @@ namespace BoardGameAggregator.Managers
                 throw new Exception("No games match.");
             }
 
+            return LookUpBoardGame(id);
+        }
+
+        public BoardGameGeekInfo LookUpBoardGame(long id)
+        {
             XmlNode gameNode = BoardGameGeekEngine.RequestGameDetails(id);
 
-            if(gameNode == null)
+            if (gameNode == null)
             {
                 // If this happens, something really funky is going on
                 throw new Exception("Error retrieving game. Invalid id or no associated data.");
@@ -39,9 +66,9 @@ namespace BoardGameAggregator.Managers
 
             BoardGameGeekInfo info = new BoardGameGeekInfo();
 
-            foreach(XmlNode node in gameNode.SelectNodes("name"))
+            foreach (XmlNode node in gameNode.SelectNodes("name"))
             {
-                if(node.Attributes["primary"] != null && node.Attributes["primary"].Value == "true")
+                if (node.Attributes["primary"] != null && node.Attributes["primary"].Value == "true")
                 {
                     info.Name = node.InnerText;
                 }
@@ -65,6 +92,12 @@ namespace BoardGameAggregator.Managers
             }
 
             return info;
+        }
+
+        public string LookupBoardGameDetails(long id)
+        {
+            XmlNode game = BoardGameGeekEngine.RequestGameDetails(id);
+            return game.SelectSingleNode("description").InnerText;
         }
 
         private long FindGameId(string name, XmlNodeList list)

@@ -52,6 +52,35 @@ namespace BoardGameAggregator.Controllers
             return Json(true);
         }
 
+        public JsonResult LookupGameList(string name)
+        {
+            try
+            {
+                BoardGameGeekInfoManager manager = new BoardGameGeekInfoManager();
+                var games = manager.LookupBoardGameList(name);
+                return Json(games, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
+        public JsonResult LookupGameDescription(long id)
+        {
+            try
+            {
+                BoardGameGeekInfoManager manager = new BoardGameGeekInfoManager();
+                var description = manager.LookupBoardGameDetails(id);
+                return Json(description, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public JsonResult LookUpGame(string name)
         {
             BoardGameGeekInfo gameInfo = null;
@@ -61,6 +90,40 @@ namespace BoardGameAggregator.Controllers
             {
                 BoardGameGeekInfoManager manager = new BoardGameGeekInfoManager();
                 gameInfo = manager.LookUpBoardGame(name);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message, JsonRequestBehavior.AllowGet);
+            }
+
+            // Unless custom name is set, use BGG's
+            game.Name = gameInfo.Name;
+            game.Id = Guid.NewGuid();
+            game.Rating = 0;
+            game.Played = false;
+            game.Owned = false;
+            game.Comments = "";
+            game.Info = gameInfo;
+
+            gameInfo.Id = Guid.NewGuid();
+            gameInfo.BoardGame = game;
+
+            db.BoardGames.Add(game);
+            db.BoardGameGeekInfoes.Add(gameInfo);
+            db.SaveChanges();
+
+            return Json(game, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddGame(long id)
+        {
+            BoardGameGeekInfo gameInfo = null;
+            BoardGame game = new BoardGame();
+
+            try
+            {
+                BoardGameGeekInfoManager manager = new BoardGameGeekInfoManager();
+                gameInfo = manager.LookUpBoardGame(id);
             }
             catch (Exception e)
             {

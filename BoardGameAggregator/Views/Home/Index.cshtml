@@ -3,9 +3,11 @@
     <script src="@Url.Content("~/Scripts/board-game-vm.js")"></script>
 }
 
+<div class="searchbar">
+    <input class="form-control" data-bind="value: searchName" />
+    <button class="btn btn-primary" data-bind="click: lookUpGameList">Search for games on board game geek</button>
+</div>
 
-<input data-bind="value: searchName"/>
-<button data-bind="click: lookUpGame" >Click!</button>
 
 <table class="table table-striped">
     <tr>
@@ -139,3 +141,24 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <!-- /ko -->
+
+<div class="modal fade" id="resultsModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Search Results</h4>
+            </div>
+            <div class="modal-body">
+                <!-- ko foreach: searchResults -->
+                <div>
+                    <span data-bind="text: name"></span>
+                    <span class="glyphicon glyphicon-plus" data-bind="click: $root.addGame"></span>
+                </div>
+                <!-- /ko -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
