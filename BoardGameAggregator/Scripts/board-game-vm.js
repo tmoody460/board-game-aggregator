@@ -51,15 +51,15 @@
 
     ko.computed(function () {
         var game = {
-            Id: self.id, Name: self.customName, Rating: self.customRating, Played: self.played, Owned: self.owned,
-            Comments: self.comments
+            Id: self.id(), Name: self.customName(), Rating: self.customRating(), Played: self.played(), Owned: self.owned(),
+            Comments: self.comments()
         }
         $.ajax({
             url: '/Home/SaveGame',
             type: 'POST',
             data: { "game": game },
             dataType: "json",
-            success: function (data) { console.log("Saved."); },
+            success: function (data) { },
             error: function(error) { console.log(error); }
         });
     }, this).extend({ throttle: 1000 });
@@ -73,6 +73,10 @@ function AppViewModel() {
 
     self.searchName = ko.observable("");
     self.searchResults = ko.observableArray([]);
+
+    self.sortBy = ko.observableArray([]);
+    self.loadingGames = ko.observable(true);
+    self.loadingSearchResults = ko.observable(false);
 
     self.addGame = function (game) {
         $.ajax({
@@ -126,18 +130,21 @@ function AppViewModel() {
     }
 
     self.lookUpGameList = function () {
+        $('#resultsModal').modal('show');
+
+        self.searchResults.removeAll();
+        self.loadingSearchResults(true);
+
         $.ajax({
             url: '/Home/LookUpGameList',
             type: "GET",
             data: { "name": self.searchName() },
             dataType: "json",
             success: function (data) {
-                self.searchResults.removeAll();
+                self.loadingSearchResults(false);
                 var results = $.map(data, function (name, id) {
                     self.searchResults.push({ "name": name, "id": id });
                 });
-                console.log(self.searchResults());
-                $('#resultsModal').modal('show');
             },
             error: function (error) {
                 console.log(error.responseText);
@@ -145,8 +152,29 @@ function AppViewModel() {
         });
     }
 
+
+    self.sortGames =  function(){
+        self.sortBy.push("rank");
+        var searchCriterion = self.sortBy()[0];
+
+        var sortedArray = self.boardGames.sort(
+            function (left, right) {
+                // Return -1 if left is less, 1 if right is less
+
+                // If it has no value, list it at the end of the results
+                if (left[searchCriterion]() == 0) {
+                    return 1;
+                } else if (right[searchCriterion]() == 0) {
+                    return -1;
+                }
+
+                return left[searchCriterion]() == right[searchCriterion]() ? 0
+                    : (left[searchCriterion]() < right[searchCriterion]() ? -1 : 1)
+            });
+    }
+
     self.loadGames = function(){
-        console.log("Loading...");
+        self.loadingGames(true);
 
         $.ajax({
             url: '/Home/GetBoardGames',
@@ -154,7 +182,8 @@ function AppViewModel() {
             data: { "page": "1" },
             dataType: "json",
             success: function (data) {
-                console.log("Success!");
+                self.loadingGames(false);
+
                 var games = $.map(data, function (game, i) {
                     var game = new BoardGame(game.Id, game.Name, game.Played, game.Owned, game.Rating, game.Comments,
                         game.Info.Name, game.Info.Description, game.Info.MinPlayers, game.Info.MaxPlayers, game.Info.Rank,
@@ -162,7 +191,9 @@ function AppViewModel() {
                         game.Info.Link, game.Info.ImageLink, self);
 
                     self.boardGames.push(game);
-                });               
+                });
+
+                self.sortGames()
             },
             error: function (error) {
                 console.log("Failure.");
@@ -170,7 +201,7 @@ function AppViewModel() {
             }
         });
     }
-
+    
     self.loadGames();
 
 }

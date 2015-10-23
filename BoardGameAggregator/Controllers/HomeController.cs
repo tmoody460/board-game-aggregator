@@ -21,10 +21,11 @@ namespace BoardGameAggregator.Controllers
 
         public JsonResult GetBoardGames(int page)
         {
-            int pageSize = 10;
+            // TODO: Rethink paging mechanisms, especially with regard to filtering, sorting, adding
+            //int pageSize = 10;
+            //var games = db.BoardGames.Include("Info").OrderBy(g => g.Name).ToPagedList(page, pageSize);
 
-            var games = db.BoardGames.Include("Info").OrderBy(g => g.Name).ToPagedList(page, pageSize);
-
+            var games = db.BoardGames.Include("Info").OrderByDescending(g => g.Info.Rating).ToList();
             return Json(games, JsonRequestBehavior.AllowGet);
         }
 

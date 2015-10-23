@@ -4,11 +4,22 @@
 }
 
 <div class="searchbar">
-    <input class="form-control" data-bind="value: searchName" />
-    <button class="btn btn-primary" data-bind="click: lookUpGameList">Search for games on board game geek</button>
+    <form>
+        <input class="form-control" data-bind="value: searchName" />
+        <button class="btn btn-primary" data-bind="click: lookUpGameList">Search for games on board game geek</button>
+    </form>
 </div>
 
-
+<!-- ko if: loadingGames -->
+<div class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+</div>
+<!-- /ko -->
+<!-- ko if: !loadingGames() -->
 <table class="table table-striped">
     <tr>
         <th></th>
@@ -42,13 +53,23 @@
         <td data-bind="text: minPlayingTime"></td>
         <td data-bind="text: maxPlayingTime"></td>
         <td>
-            <span class="glyphicon glyphicon-eye-open" data-bind="click: viewGame"></span>
-            <span class="glyphicon glyphicon-pencil" data-bind="click: editGame"></span>
-            <span class="glyphicon glyphicon-trash" data-bind="click: deleteGame"></span>
+            <div  class="action-container">
+                <button type="button" class="btn btn-default" data-bind="click: viewGame">
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                </button>
+                <button type="button" class="btn btn-default" data-bind="click: editGame">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+                <button type="button" class="btn btn-default" data-bind="click: deleteGame">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </div>
+            
         </td>
     </tr>
     <!-- /ko -->
 </table>
+<!-- /ko -->
 
 <!-- ko with: detailsGame -->
 <div class="modal fade" id="editModal">
@@ -149,10 +170,22 @@
                 <h4 class="modal-title">Search Results</h4>
             </div>
             <div class="modal-body">
+                <!-- ko if: loadingSearchResults -->
+                <div class="spinner">
+                    <div class="rect1"></div>
+                    <div class="rect2"></div>
+                    <div class="rect3"></div>
+                    <div class="rect4"></div>
+                    <div class="rect5"></div>
+                </div>
+                <!-- /ko -->
+
                 <!-- ko foreach: searchResults -->
                 <div>
                     <span data-bind="text: name"></span>
-                    <span class="glyphicon glyphicon-plus" data-bind="click: $root.addGame"></span>
+                    <button type="button" class="btn btn-default btn-xs" data-bind="click: $root.addGame">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
                 </div>
                 <!-- /ko -->
             </div>
