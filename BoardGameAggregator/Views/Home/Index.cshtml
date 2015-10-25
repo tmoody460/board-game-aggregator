@@ -168,8 +168,20 @@
             </div>
             <div class="modal-body">
                 <div>
-                    <a data-bind="attr: { href: bggLink }">Visit Board Game Geek</a>
-                    <a data-bind="attr: { href: redditLink }">Search /r/boardgames</a>
+                    <ul>
+                        <li>
+                            <a data-bind="attr: { href: bggLink }">Visit Board Game Geek</a>
+                        </li>
+                        <li>
+                            <a data-bind="attr: { href: redditLink }">Search /r/boardgames</a>
+                        </li>
+                        <li>
+                            <a data-bind="attr: { href: youtubeLink }">Search for youtube reviews</a>
+                        </li>
+                        <li>
+                            <a data-bind="attr: { href: amazonLink }">Search amazon</a>
+                        </li>
+                    </ul>
                     <div>
                         <label>Custom Name</label>
                         <p data-bind="text: customName"></p>
@@ -188,9 +200,6 @@
                         <p data-bind="text: comments"></p>
                     </div>
                     <!-- /ko -->
-                    <a data-bind="attr: { href: bggLink }">Visit Board Game Geek</a>
-                    <a data-bind="attr: { href: redditLink }">Search /r/boardgames</a>
-
                 </div>
             </div>
             <div class="modal-footer">

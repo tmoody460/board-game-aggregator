@@ -21,6 +21,8 @@
     self.bggLink = ko.observable(bggLink);
     self.imageLink = ko.observable(imageLink);
     self.redditLink = "https://www.reddit.com/r/boardgames/search?q=" + self.bggName() + "&restrict_sr=on";
+    self.youtubeLink = "https://www.youtube.com/results?search_query=" + self.bggName() + " review";
+    self.amazonLink = "https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=" + self.bggName();
     self.bggId = ko.observable(bggId);
 
     self.inputValidated = ko.observable(true);
@@ -77,7 +79,8 @@
             self.validationErrors.push("Please include a custom name. Or at least copy BGG's.");
             valid = false;
         }
-        if(isNaN(self.customRating()) || self.customRating() == ""){
+
+        if (isNaN(self.customRating()) || self.customRating() === "") {
             self.validationErrors.push("Ratings must be numeric.");
             valid = false;
         } if (self.customRating() < 0 || self.customRating() > 10) {
@@ -109,7 +112,7 @@
     }, this, "beforeChange");
 
     self.customRating.subscribe(function (previousValue) {
-        if (previousValue < 0 || previousValue > 10 && !isNaN(previousValue) && previousValue != "") {
+        if (previousValue < 0 || previousValue > 10 && !isNaN(previousValue) && previousValue !== "") {
             self.previousCustomRating(previousValue);
         }
     }, this, "beforeChange");
