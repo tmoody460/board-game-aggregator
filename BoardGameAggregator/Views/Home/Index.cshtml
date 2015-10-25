@@ -130,6 +130,12 @@
                 <h4 class="modal-title" data-bind="text: bggName"></h4>
             </div>
             <div class="modal-body">
+                <!-- ko foreach: validationErrors -->
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span data-bind="text: $data">Error:</span>
+                </div>
+                <!-- /ko -->
                 <form>
                     <div class="form-group">
                         <label>Custom Name</label>

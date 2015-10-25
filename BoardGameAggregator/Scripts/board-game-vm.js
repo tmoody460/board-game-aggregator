@@ -23,6 +23,11 @@
     self.redditLink = "https://www.reddit.com/r/boardgames/search?q=" + self.bggName() + "&restrict_sr=on";
     self.bggId = ko.observable(bggId);
 
+    self.inputValidated = ko.observable(true);
+    self.validationErrors = ko.observableArray([]);
+    self.previousCustomRating = ko.observable(customRating);
+    self.previousCustomName = ko.observable(customName);
+
     self.viewGame = function()
     {
         parent.detailsGame(self);
@@ -32,6 +37,13 @@
     self.editGame = function () {
         parent.detailsGame(self);
         $('#editModal').modal('show');
+
+        $('#editModal').on('hidden.bs.modal', function () {
+            if (self.validationErrors().length > 0) {
+                self.customName(self.previousCustomName());
+                self.customRating(self.previousCustomRating());
+            }
+        })
     }
 
     self.deleteGame = function () {
@@ -55,19 +67,53 @@
     }
 
     ko.computed(function () {
-        var game = {
-            Id: self.id(), Name: self.customName(), Rating: self.customRating(), Played: self.played(), Owned: self.owned(),
-            Comments: self.comments()
+        var valid = true;
+        self.validationErrors.removeAll();
+
+        if (self.customName().length > 80) {
+            self.validationErrors.push("Brevity is the soul of wit. Choose a shorter name.");
+            valid = false;
+        } else if (self.customName().length == 0) {
+            self.validationErrors.push("Please include a custom name. Or at least copy BGG's.");
+            valid = false;
         }
-        $.ajax({
-            url: '/Home/SaveGame',
-            type: 'POST',
-            data: { "game": game },
-            dataType: "json",
-            success: function (data) { },
-            error: function(error) { console.log(error); }
-        });
-    }, this).extend({ throttle: 1000 });
+        if(isNaN(self.customRating()) || self.customRating() == ""){
+            self.validationErrors.push("Ratings must be numeric.");
+            valid = false;
+        } if (self.customRating() < 0 || self.customRating() > 10) {
+            self.validationErrors.push("Ratings must be between 0 and 10. Inclusive.");
+            valid = false;
+        }
+
+        if (valid) {
+            var game = {
+                Id: self.id(), Name: self.customName(), Rating: self.customRating(), Played: self.played(), Owned: self.owned(),
+                Comments: self.comments()
+            }
+
+            $.ajax({
+                url: '/Home/SaveGame',
+                type: 'POST',
+                data: { "game": game },
+                dataType: "json",
+                success: function (data) { },
+                error: function (error) { console.log(error); }
+            });
+        }
+    }, this);
+
+    self.customName.subscribe(function (previousValue) {
+        if (previousValue.length < 80 && previousValue.length > 0) {
+            self.previousCustomName(previousValue);
+        } 
+    }, this, "beforeChange");
+
+    self.customRating.subscribe(function (previousValue) {
+        if (previousValue < 0 || previousValue > 10 && !isNaN(previousValue) && previousValue != "") {
+            self.previousCustomRating(previousValue);
+        }
+    }, this, "beforeChange");
+
 }
 
 function FilterCriterion(field, symbol, value)
