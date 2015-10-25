@@ -65,6 +65,29 @@
     }, this).extend({ throttle: 1000 });
 }
 
+function FilterCriterion(field, symbol, value)
+{
+    var self = this;
+
+    self.field = field;
+    self.isEqualTo = false;
+    self.isGreaterThan = false;
+    self.isLessThan = false;
+    self.isNotEqualTo = false;
+    self.value = value;
+
+    if(symbol == "==")
+    {
+        self.isEqualTo = true;
+    }else if(symbol == ">"){
+        self.isGreaterThan = true;
+    }else if(symbol == "<"){
+        self.isLessThan = true;
+    } else {
+        self.isNotEqualTo = true;
+    }
+}
+
 function AppViewModel() {
     var self = this;
 
@@ -74,9 +97,13 @@ function AppViewModel() {
     self.searchName = ko.observable("");
     self.searchResults = ko.observableArray([]);
 
-    self.sortBy = ko.observableArray([]);
     self.loadingGames = ko.observable(true);
     self.loadingSearchResults = ko.observable(false);
+
+    self.sortBy = ko.observable("rank");
+    self.sortAscending = ko.observable(true);
+    self.filterBy = ko.observableArray([]);
+    self.visibleGames = ko.observableArray([]);
 
     self.addGame = function (game) {
         $.ajax({
@@ -153,25 +180,78 @@ function AppViewModel() {
     }
 
 
-    self.sortGames =  function(){
-        self.sortBy.push("rank");
-        var searchCriterion = self.sortBy()[0];
+    self.sortGames = function () {
+        var searchCriterion = self.sortBy();
+        var ascending = self.sortAscending();
 
-        var sortedArray = self.boardGames.sort(
+        var sortedArray = self.visibleGames.sort(
             function (left, right) {
-                // Return -1 if left is less, 1 if right is less
-
                 // If it has no value, list it at the end of the results
-                if (left[searchCriterion]() == 0) {
+                if (left[searchCriterion]() === 0) {
                     return 1;
-                } else if (right[searchCriterion]() == 0) {
+                } else if (right[searchCriterion]() === 0) {
                     return -1;
                 }
 
-                return left[searchCriterion]() == right[searchCriterion]() ? 0
-                    : (left[searchCriterion]() < right[searchCriterion]() ? -1 : 1)
+                if (ascending) {
+                    return left[searchCriterion]() == right[searchCriterion]() ? 0
+                        : (left[searchCriterion]() < right[searchCriterion]() ? -1 : 1);
+                } else {
+                    return left[searchCriterion]() == right[searchCriterion]() ? 0
+                        : (left[searchCriterion]() < right[searchCriterion]() ? 1 : -1);
+                }
             });
+
+        self.visibleGames(sortedArray);
     }
+
+    self.addFilter = function () {
+        var criterion = new FilterCriterion("rank", "!=", "1");
+        self.filterBy.push(criterion);
+    };
+
+    self.changeSorting = function (column) {
+        if (self.sortBy() == column) {
+            self.sortAscending(!self.sortAscending());
+        } else {
+            self.sortBy(column);
+            self.sortAscending(true);
+        }
+    }
+
+    self.filterGames = function () {
+        self.visibleGames([]);
+
+        // Copy the games, maintaining reference for underlying observables
+        // but not for the list itself
+        self.visibleGames(self.boardGames.slice(0));
+
+        self.visibleGames.remove(function (item) {
+
+            var filterOut = false;
+
+            ko.utils.arrayForEach(self.filterBy(), function (criterion) {
+                if (criterion.isEqualTo && item[criterion.field]() != criterion.value) {
+                    filterOut = true;
+                } else if (criterion.isGreaterThan && item[criterion.field]() <= criterion.value) {
+                    filterOut = true;
+                } else if (criterion.isLessThan && item[criterion.field]() >= criterion.value) {
+                    filterOut = true;
+                } else if (criterion.isNotEqualTo && item[criterion.field]() == criterion.value) {
+                    filterOut = true;
+                }
+            });
+
+            return filterOut;
+        });
+    };
+
+    self.sort = function (sortBy) {
+        self.changeSorting(sortBy);
+        self.loadingGames(true);
+        self.sortGames();
+        self.loadingGames(false);
+    };
 
     self.loadGames = function(){
         self.loadingGames(true);
@@ -182,7 +262,6 @@ function AppViewModel() {
             data: { "page": "1" },
             dataType: "json",
             success: function (data) {
-                self.loadingGames(false);
 
                 var games = $.map(data, function (game, i) {
                     var game = new BoardGame(game.Id, game.Name, game.Played, game.Owned, game.Rating, game.Comments,
@@ -193,7 +272,10 @@ function AppViewModel() {
                     self.boardGames.push(game);
                 });
 
-                self.sortGames()
+                self.filterGames();
+                self.sortGames();
+
+                self.loadingGames(false);
             },
             error: function (error) {
                 console.log("Failure.");

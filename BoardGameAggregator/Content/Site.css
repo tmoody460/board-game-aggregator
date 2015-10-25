@@ -24,6 +24,16 @@
     white-space: nowrap;
 }
 
+th a{
+    color: black;
+}
+
+th a:hover{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 /************ Loading spinner css ************/
 /* https://github.com/tobiasahlin/SpinKit */
 

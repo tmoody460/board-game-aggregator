@@ -23,19 +23,70 @@
 <table class="table table-striped">
     <tr>
         <th></th>
-        <th>Custom Name</th>
-        <th>Played?</th>
-        <th>Owned?</th>
-        <th>My Rating</th>
-        <th>Min Players</th>
-        <th>Max Players</th>
-        <th>BGG Rank</th>
-        <th>BGG Rating</th>
-        <th>Min Play Time</th>
-        <th>Max Play Time</th>
+        <th>
+            <a data-bind="click: function() { sort('customName'); }">Name 
+                <span class="glyphicon glyphicon-chevron-up" data-bind="visible: sortBy() == 'customName' && !sortAscending()"></span>
+                <span class="glyphicon glyphicon-chevron-down" data-bind="visible: sortBy() == 'customName' && sortAscending()"></span>
+            </a>
+            
+        </th>
+        <th>
+            <a data-bind="click: function() { sort('played'); }">Played?
+                <span class="glyphicon glyphicon-chevron-up" data-bind="visible: sortBy() == 'played' && !sortAscending()"></span>
+                <span class="glyphicon glyphicon-chevron-down" data-bind="visible: sortBy() == 'played' && sortAscending()"></span>
+            </a>
+        </th>
+        <th>
+            <a data-bind="click: function() { sort('owned'); }">Owned?
+                <span class="glyphicon glyphicon-chevron-up" data-bind="visible: sortBy() == 'owned' && !sortAscending()"></span>
+                <span class="glyphicon glyphicon-chevron-down" data-bind="visible: sortBy() == 'owned' && sortAscending()"></span>
+            </a>
+        </th>
+        <th>
+            <a data-bind="click: function() { sort('customRating'); }">My Rating
+                <span class="glyphicon glyphicon-chevron-up" data-bind="visible: sortBy() == 'customRating' && !sortAscending()"></span>
+                <span class="glyphicon glyphicon-chevron-down" data-bind="visible: sortBy() == 'customRating' && sortAscending()"></span>
+            </a>
+        </th>
+        <th>
+            <a data-bind="click: function() { sort('minPlayers'); }">Min Players
+                <span class="glyphicon glyphicon-chevron-up" data-bind="visible: sortBy() == 'minPlayers' && !sortAscending()"></span>
+                <span class="glyphicon glyphicon-chevron-down" data-bind="visible: sortBy() == 'minPlayers' && sortAscending()"></span>
+            </a>
+        </th>
+        <th>
+            <a data-bind="click: function() { sort('maxPlayers'); }">Max Players
+                <span class="glyphicon glyphicon-chevron-up" data-bind="visible: sortBy() == 'maxPlayers' && !sortAscending()"></span>
+                <span class="glyphicon glyphicon-chevron-down" data-bind="visible: sortBy() == 'maxPlayers' && sortAscending()"></span>
+            </a>
+        </th>
+        <th>
+            <a data-bind="click: function() { sort('rank'); }">BGG Rank
+                <span class="glyphicon glyphicon-chevron-up" data-bind="visible: sortBy() == 'rank' && !sortAscending()"></span>
+                <span class="glyphicon glyphicon-chevron-down" data-bind="visible: sortBy() == 'rank' && sortAscending()"></span>
+            </a>
+        </th>
+        <th>
+            <a data-bind="click: function() { sort('rating'); }">BGG Rating
+                <span class="glyphicon glyphicon-chevron-up" data-bind="visible: sortBy() == 'rating' && !sortAscending()"></span>
+                <span class="glyphicon glyphicon-chevron-down" data-bind="visible: sortBy() == 'rating' && sortAscending()"></span>
+            </a>
+        </th>
+        <th>
+            <a data-bind="click: function() { sort('minPlayingTime'); }">Min Play Time
+                <span class="glyphicon glyphicon-chevron-up" data-bind="visible: sortBy() == 'minPlayingTime' && !sortAscending()"></span>
+                <span class="glyphicon glyphicon-chevron-down" data-bind="visible: sortBy() == 'minPlayingTime' && sortAscending()"></span>
+            </a>
+        </th>
+        <th>
+            <a data-bind="click: function() { sort('maxPlayingTime'); }">Max Play Time
+                <span class="glyphicon glyphicon-chevron-up" data-bind="visible: sortBy() == 'maxPlayingTime' && !sortAscending()"></span>
+                <span class="glyphicon glyphicon-chevron-down" data-bind="visible: sortBy() == 'maxPlayingTime' && sortAscending()"></span>
+            </a>
+        </th>
         <th>Actions</th>
     </tr>
-    <!-- ko foreach: boardGames -->
+    <!-- ko foreach: visibleGames -->
     <tr>
         <td><img src="" data-bind="attr: { src: imageLink }" /></td>
         <td data-bind="text: customName"></td>
