@@ -234,7 +234,8 @@
                 <!-- ko foreach: searchResults -->
                 <div>
                     <span data-bind="text: name"></span>
-                    <button type="button" class="btn btn-default btn-xs" data-bind="click: $root.addGame">
+                    <span class="glyphicon glyphicon-ok" data-bind="visible: saved"></span>
+                    <button type="button" class="btn btn-default btn-xs" data-bind="click: $root.addGame, visible: !saved()">
                         <span class="glyphicon glyphicon-plus"></span>
                     </button>
                 </div>

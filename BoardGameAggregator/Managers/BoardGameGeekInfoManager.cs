@@ -73,6 +73,7 @@ namespace BoardGameAggregator.Managers
                     info.Name = node.InnerText;
                 }
             }
+            info.BggId = id;
             info.Link = "https://boardgamegeek.com/boardgame/" + id;
             info.Description = gameNode.SelectSingleNode("description").InnerText;
             info.ImageLink = gameNode.SelectSingleNode("thumbnail").InnerText;

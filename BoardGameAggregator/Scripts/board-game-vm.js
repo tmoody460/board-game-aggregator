@@ -1,5 +1,5 @@
 ﻿function BoardGame(id, customName, played, owned, customRating, comments, bggName, description, minPlayers, 
-    maxPlayers, rank, rating, numRatings, minPlayingTime, maxPlayingTime, bggLink, imageLink, parent) {
+    maxPlayers, rank, rating, numRatings, minPlayingTime, maxPlayingTime, bggLink, imageLink, bggId, parent) {
     var self = this;
     var parent = parent;
 
@@ -21,6 +21,7 @@
     self.bggLink = ko.observable(bggLink);
     self.imageLink = ko.observable(imageLink);
     self.redditLink = "https://www.reddit.com/r/boardgames/search?q=" + self.bggName() + "&restrict_sr=on";
+    self.bggId = ko.observable(bggId);
 
     self.viewGame = function()
     {
@@ -44,7 +45,11 @@
             type: 'POST',
             data: { "id": self.id },
             dataType: "json",
-            success: function (data) { parent.boardGames.remove(function (item) { return item.id() == self.id() }) },
+            success: function (data) {
+                parent.boardGames.remove(function (item) {
+                    return item.id() == self.id();
+                });
+            },
             error: function (error) { console.log(error); }
         });
     }
@@ -88,6 +93,20 @@ function FilterCriterion(field, symbol, value)
     }
 }
 
+function SearchResult(name, id, vm) {
+
+    var self = this;
+
+    self.name = name;
+    self.id = id;
+    self.saved = ko.computed(function () {
+        vm.boardGames();
+        return vm.determineIfSaved(id);
+    });
+
+    
+}
+
 function AppViewModel() {
     var self = this;
 
@@ -100,7 +119,7 @@ function AppViewModel() {
     self.loadingGames = ko.observable(true);
     self.loadingSearchResults = ko.observable(false);
 
-    self.sortBy = ko.observable("rank");
+    self.sortBy = ko.observable("customName");
     self.sortAscending = ko.observable(true);
     self.filterBy = ko.observableArray([]);
     self.visibleGames = ko.observableArray([]);
@@ -121,7 +140,7 @@ function AppViewModel() {
                     var game = new BoardGame(data.Id, data.Name, data.Played, data.Owned, data.Rating, data.Comments,
                         data.Info.Name, data.Info.Description, data.Info.MinPlayers, data.Info.MaxPlayers, data.Info.Rank,
                         data.Info.Rating, data.Info.NumRatings, data.Info.MinPlayingTime, data.Info.MaxPlayingTime,
-                        data.Info.Link, data.Info.ImageLink, self);
+                        data.Info.Link, data.Info.ImageLink, data.Info.BggId, self);
                     self.boardGames.push(game);
                 }
 
@@ -137,8 +156,7 @@ function AppViewModel() {
             data: { "name": self.searchName() },
             dataType: "json",
             success: function (data) {
-                if (!data.Id)
-                {
+                if (!data.Id) {
                     // Error message
                     console.log(data);
                 } else {
@@ -146,15 +164,23 @@ function AppViewModel() {
                     var game = new BoardGame(data.Id, data.Name, data.Played, data.Owned, data.Rating, data.Comments,
                         data.Info.Name, data.Info.Description, data.Info.MinPlayers, data.Info.MaxPlayers, data.Info.Rank,
                         data.Info.Rating, data.Info.NumRatings, data.Info.MinPlayingTime, data.Info.MaxPlayingTime,
-                        data.Info.Link, data.Info.ImageLink, self);
+                        data.Info.Link, data.Info.ImageLink, data.Info.BggId, self);
                     self.boardGames.push(game);
-                }                
+                }
             },
             error: function (error) {
                 console.log(error);
             }
         });
-    }
+    };
+
+    self.determineIfSaved = function (id) {
+        var match = ko.utils.arrayFirst(self.boardGames(), function (game) {
+            return game.bggId() == id;
+        });
+
+        return match != null;
+    };
 
     self.lookUpGameList = function () {
         $('#resultsModal').modal('show');
@@ -170,7 +196,8 @@ function AppViewModel() {
             success: function (data) {
                 self.loadingSearchResults(false);
                 var results = $.map(data, function (name, id) {
-                    self.searchResults.push({ "name": name, "id": id });
+                    var result = new SearchResult(name, id, self);
+                    self.searchResults.push(result);
                 });
             },
             error: function (error) {
@@ -253,6 +280,19 @@ function AppViewModel() {
         self.loadingGames(false);
     };
 
+    self.subscribeToChanges = function () {
+
+        self.boardGames.subscribe(function () {
+            self.loadingGames(true);
+
+            self.filterGames();
+            self.sortGames();
+
+            self.loadingGames(false);
+        });
+
+    };
+
     self.loadGames = function(){
         self.loadingGames(true);
 
@@ -267,7 +307,7 @@ function AppViewModel() {
                     var game = new BoardGame(game.Id, game.Name, game.Played, game.Owned, game.Rating, game.Comments,
                         game.Info.Name, game.Info.Description, game.Info.MinPlayers, game.Info.MaxPlayers, game.Info.Rank,
                         game.Info.Rating, game.Info.NumRatings, game.Info.MinPlayingTime, game.Info.MaxPlayingTime,
-                        game.Info.Link, game.Info.ImageLink, self);
+                        game.Info.Link, game.Info.ImageLink, game.Info.BggId, self);
 
                     self.boardGames.push(game);
                 });
@@ -276,12 +316,15 @@ function AppViewModel() {
                 self.sortGames();
 
                 self.loadingGames(false);
+
+                self.subscribeToChanges();
             },
             error: function (error) {
                 console.log("Failure.");
                 console.log(error);
             }
         });
+
     }
     
     self.loadGames();

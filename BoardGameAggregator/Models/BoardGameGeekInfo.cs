@@ -35,6 +35,8 @@ namespace BoardGameAggregator.Models
 
         public string ImageLink { get; set; }
 
+        public long BggId { get; set; }
+
         [Required]
         [ScriptIgnore]
         public BoardGame BoardGame { get; set; }

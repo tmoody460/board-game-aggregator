@@ -176,6 +176,10 @@
     <Compile Include="Migrations\201510201735495_AddCustomRating.Designer.cs">
       <DependentUpon>201510201735495_AddCustomRating.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510251758346_AddBggId.cs" />
+    <Compile Include="Migrations\201510251758346_AddBggId.Designer.cs">
+      <DependentUpon>201510251758346_AddBggId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BoardGame.cs" />
     <Compile Include="Models\BoardGameGeekInfo.cs" />
@@ -256,6 +260,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510201735495_AddCustomRating.resx">
       <DependentUpon>201510201735495_AddCustomRating.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510251758346_AddBggId.resx">
+      <DependentUpon>201510251758346_AddBggId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
