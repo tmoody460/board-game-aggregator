@@ -11,16 +11,22 @@ namespace BoardGameAggregator.Models
         [Key]
         public Guid Id { get; set; }
 
+        [Required]
+        [StringLength(80)]
         public string Name { get; set; }
 
+        [Required]
         public bool Played { get; set; }
         
+        [Required]
         public bool Owned { get; set;  }
 
+        [Required]
+        [Range(0,10)]
         public double Rating { get; set; }
 
         public string Comments { get; set; }
-
+        
         public BoardGameGeekInfo Info { get; set; }
 
     }

@@ -7,12 +7,12 @@ namespace BoardGameAggregator.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.BoardGameGeekInfoes", "Link", c => c.String());
+            AddColumn("dbo.BoardGameGeekInfo", "Link", c => c.String());
         }
         
         public override void Down()
         {
-            DropColumn("dbo.BoardGameGeekInfoes", "Link");
+            DropColumn("dbo.BoardGameGeekInfo", "Link");
         }
     }
 }

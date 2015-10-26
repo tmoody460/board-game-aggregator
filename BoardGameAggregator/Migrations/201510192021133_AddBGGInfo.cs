@@ -8,7 +8,7 @@ namespace BoardGameAggregator.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.BoardGameGeekInfoes",
+                "dbo.BoardGameGeekInfo",
                 c => new
                     {
                         Id = c.Guid(nullable: false),
@@ -27,9 +27,9 @@ namespace BoardGameAggregator.Migrations
         
         public override void Down()
         {
-            DropForeignKey("dbo.BoardGameGeekInfoes", "Id", "dbo.BoardGames");
-            DropIndex("dbo.BoardGameGeekInfoes", new[] { "Id" });
-            DropTable("dbo.BoardGameGeekInfoes");
+            DropForeignKey("dbo.BoardGameGeekInfo", "Id", "dbo.BoardGames");
+            DropIndex("dbo.BoardGameGeekInfo", new[] { "Id" });
+            DropTable("dbo.BoardGameGeekInfo");
         }
     }
 }

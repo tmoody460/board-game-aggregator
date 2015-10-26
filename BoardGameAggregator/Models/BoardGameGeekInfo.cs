@@ -10,9 +10,10 @@ namespace BoardGameAggregator.Models
     public class BoardGameGeekInfo
     {
 
-        [Key]
+        [Key, Required]
         public Guid Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -35,6 +36,7 @@ namespace BoardGameAggregator.Models
 
         public string ImageLink { get; set; }
 
+        [Required]
         public long BggId { get; set; }
 
         [Required]

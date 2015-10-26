@@ -21,6 +21,6 @@ namespace BoardGameAggregator.Models
 
         public System.Data.Entity.DbSet<BoardGameAggregator.Models.BoardGame> BoardGames { get; set; }
 
-        public System.Data.Entity.DbSet<BoardGameAggregator.Models.BoardGameGeekInfo> BoardGameGeekInfoes { get; set; }
+        public System.Data.Entity.DbSet<BoardGameAggregator.Models.BoardGameGeekInfo> BoardGameGeekInfo { get; set; }
     }
 }

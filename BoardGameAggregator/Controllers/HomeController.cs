@@ -44,9 +44,9 @@ namespace BoardGameAggregator.Controllers
             var game = db.BoardGames.Find(id);
             db.Entry(game).Reference(p => p.Info).Load();
 
-            var bggInfo = db.BoardGameGeekInfoes.Find(game.Info.Id);
+            var bggInfo = db.BoardGameGeekInfo.Find(game.Info.Id);
 
-            db.BoardGameGeekInfoes.Remove(bggInfo);
+            db.BoardGameGeekInfo.Remove(bggInfo);
             db.BoardGames.Remove(game);
             db.SaveChanges();
 
@@ -110,7 +110,7 @@ namespace BoardGameAggregator.Controllers
             gameInfo.BoardGame = game;
 
             db.BoardGames.Add(game);
-            db.BoardGameGeekInfoes.Add(gameInfo);
+            db.BoardGameGeekInfo.Add(gameInfo);
             db.SaveChanges();
 
             return Json(game, JsonRequestBehavior.AllowGet);
@@ -131,7 +131,7 @@ namespace BoardGameAggregator.Controllers
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
 
-            // Unless custom name is set, use BGG's
+            // Until custom name is set, use BGG's
             game.Name = gameInfo.Name;
             game.Id = Guid.NewGuid();
             game.Rating = 0;
@@ -144,7 +144,7 @@ namespace BoardGameAggregator.Controllers
             gameInfo.BoardGame = game;
 
             db.BoardGames.Add(game);
-            db.BoardGameGeekInfoes.Add(gameInfo);
+            db.BoardGameGeekInfo.Add(gameInfo);
             db.SaveChanges();
 
             return Json(game, JsonRequestBehavior.AllowGet);
