@@ -31,7 +31,7 @@ namespace BoardGameAggregator.Repositories
 
         public IEnumerable<BoardGame> GetBoardGames()
         {
-            return context.BoardGames.Include("Info").ToList<BoardGame>();
+            return context.BoardGames.Include(g => g.Info).ToList();
         }
 
         public void InsertBoardGame(BoardGame game)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Web;
 
@@ -17,6 +18,12 @@ namespace BoardGameAggregator.Models
     
         public SystemContext() : base("name=SystemContext")
         {
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            base.OnModelCreating(modelBuilder);
         }
 
         public System.Data.Entity.DbSet<BoardGameAggregator.Models.BoardGame> BoardGames { get; set; }

@@ -224,6 +224,10 @@
     <Compile Include="Migrations\201510260230204_AddAttributeTagsToModels.Designer.cs">
       <DependentUpon>201510260230204_AddAttributeTagsToModels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510260816423_FixDatabasePluralizingError.cs" />
+    <Compile Include="Migrations\201510260816423_FixDatabasePluralizingError.Designer.cs">
+      <DependentUpon>201510260816423_FixDatabasePluralizingError.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BoardGame.cs" />
     <Compile Include="Models\BoardGameGeekInfo.cs" />
@@ -310,6 +314,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510260230204_AddAttributeTagsToModels.resx">
       <DependentUpon>201510260230204_AddAttributeTagsToModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510260816423_FixDatabasePluralizingError.resx">
+      <DependentUpon>201510260816423_FixDatabasePluralizingError.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

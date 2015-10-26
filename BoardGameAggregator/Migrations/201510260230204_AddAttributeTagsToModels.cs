@@ -7,14 +7,14 @@ namespace BoardGameAggregator.Migrations
     {
         public override void Up()
         {
-            AlterColumn("dbo.BoardGameGeekInfoes", "Name", c => c.String(nullable: false));
+            AlterColumn("dbo.BoardGameGeekInfo", "Name", c => c.String(nullable: false));
             AlterColumn("dbo.BoardGames", "Name", c => c.String(nullable: false, maxLength: 80));
         }
         
         public override void Down()
         {
             AlterColumn("dbo.BoardGames", "Name", c => c.String());
-            AlterColumn("dbo.BoardGameGeekInfoes", "Name", c => c.String());
+            AlterColumn("dbo.BoardGameGeekInfo", "Name", c => c.String());
         }
     }
 }
