@@ -1,0 +1,36 @@
+﻿<!-- ko with: detailsGame -->
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" data-bind="text: bggName"></h4>
+            </div>
+            <div class="modal-body">
+                <!-- ko foreach: validationErrors -->
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span data-bind="text: $data">Error:</span>
+                </div>
+                <!-- /ko -->
+                <form>
+                    <div class="form-group">
+                        <label>Custom Name</label>
+                        <input class="form-control" data-bind="value: customName">
+                    </div>
+                    <div class="form-group">
+                        <label>Custom Rating</label>
+                        <input class="form-control" data-bind="value: customRating">
+                    </div>
+                    <div class="form-group">
+                        <label>Comments</label>
+                        <textarea class="form-control" data-bind="value: comments" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- /ko -->

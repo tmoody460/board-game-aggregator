@@ -149,5 +149,6 @@ namespace BoardGameAggregator.Controllers
 
             return Json(game, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

@@ -1,0 +1,50 @@
+﻿<!-- ko with: detailsGame -->
+<div class="modal fade" id="detailsModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" data-bind="text: bggName"></h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <ul>
+                        <li>
+                            <a data-bind="attr: { href: bggLink }" target="_blank">Visit board game geek</a>
+                        </li>
+                        <li>
+                            <a data-bind="attr: { href: redditLink }" target="_blank">Search /r/boardgames</a>
+                        </li>
+                        <li>
+                            <a data-bind="attr: { href: youtubeLink }" target="_blank">Search for youtube reviews</a>
+                        </li>
+                        <li>
+                            <a data-bind="attr: { href: amazonLink }" target="_blank">Search amazon</a>
+                        </li>
+                    </ul>
+                    <div>
+                        <label>Custom Name</label>
+                        <p data-bind="text: customName"></p>
+                    </div>
+                    <div>
+                        <label>Custom Rating</label>
+                        <p data-bind="text: customRating"></p>
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <p data-bind="html: description"></p>
+                    </div>
+                    <!-- ko if: comments-->
+                    <div>
+                        <label>Comments</label>
+                        <p data-bind="text: comments"></p>
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- /ko -->

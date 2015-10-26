@@ -1,0 +1,32 @@
+﻿<div class="modal fade" id="resultsModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Search Results</h4>
+            </div>
+            <div class="modal-body">
+                <!-- ko if: loadingSearchResults -->
+                <div class="spinner">
+                    <div class="rect1"></div>
+                    <div class="rect2"></div>
+                    <div class="rect3"></div>
+                    <div class="rect4"></div>
+                    <div class="rect5"></div>
+                </div>
+                <!-- /ko -->
+                <!-- ko foreach: searchResults -->
+                <div>
+                    <span data-bind="text: name"></span>
+                    <span class="glyphicon glyphicon-ok" data-bind="visible: saved"></span>
+                    <button type="button" class="btn btn-default btn-xs" data-bind="click: $root.addGame, visible: !saved()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+                <!-- /ko -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
