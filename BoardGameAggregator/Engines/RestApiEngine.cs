@@ -7,10 +7,10 @@ using System.Xml;
 
 namespace BoardGameAggregator.Engines
 {
-    public static class RestApiEngine
+    public class RestApiEngine : IRestApiEngine
     {
 
-        public static XmlDocument CallRestApi(string url)
+        public XmlDocument CallRestApi(string url)
         {
             XmlDocument xmlDoc = null;
 

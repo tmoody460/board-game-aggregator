@@ -1,5 +1,6 @@
 ﻿using BoardGameAggregator.Engines;
 using BoardGameAggregator.Models;
+using BoardGameAggregator.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,24 @@ using System.Xml;
 
 namespace BoardGameAggregator.Managers
 {
-    public class BoardGameGeekInfoManager
+    public class BoardGameGeekInfoManager : IBoardGameGeekInfoManager
     {
+        private IBoardGameGeekEngine engine;
+        private IUnitOfWork unitOfWork;
+        private IBoardGameGeekInfoRepository bggRepo;
+
+        public BoardGameGeekInfoManager(IBoardGameGeekEngine engine, IUnitOfWork unitOfWork)
+        {
+            this.engine = engine;
+            this.unitOfWork = unitOfWork;
+            this.bggRepo = unitOfWork.GetBoardGameGeekInfoRepository();
+        }
 
         public Dictionary<string, string> LookupBoardGameList(string name)
         {
             Dictionary<string, string> games = new Dictionary<string, string>();
 
-            XmlNodeList list = BoardGameGeekEngine.RequestSearchResults(name);
+            XmlNodeList list = engine.RequestSearchResults(name);
 
             foreach (XmlNode game in list)
             {
@@ -37,7 +48,7 @@ namespace BoardGameAggregator.Managers
 
         public BoardGameGeekInfo LookUpBoardGame(string name)
         {
-            XmlNodeList list = BoardGameGeekEngine.RequestSearchResults(name);
+            XmlNodeList list = engine.RequestSearchResults(name);
 
             if(list.Count == 0)
             {
@@ -56,7 +67,7 @@ namespace BoardGameAggregator.Managers
 
         public BoardGameGeekInfo LookUpBoardGame(long id)
         {
-            XmlNode gameNode = BoardGameGeekEngine.RequestGameDetails(id);
+            XmlNode gameNode = engine.RequestGameDetails(id);
 
             if (gameNode == null)
             {
@@ -97,7 +108,7 @@ namespace BoardGameAggregator.Managers
 
         public string LookupBoardGameDetails(long id)
         {
-            XmlNode game = BoardGameGeekEngine.RequestGameDetails(id);
+            XmlNode game = engine.RequestGameDetails(id);
             return game.SelectSingleNode("description").InnerText;
         }
 
@@ -123,6 +134,21 @@ namespace BoardGameAggregator.Managers
             }
 
             return foundId;
+        }
+
+        public BoardGameGeekInfo FindInfo(Guid id)
+        {
+            return bggRepo.GetBoardGameGeekInfo(id);
+        }
+
+        public void RemoveInfo(BoardGameGeekInfo bggInfo)
+        {
+            bggRepo.DeleteBoardGameGeekInfo(bggInfo.Id);
+        }
+
+        public void AddInfo(BoardGameGeekInfo gameInfo)
+        {
+            bggRepo.InsertBoardGameGeekInfo(gameInfo);
         }
     }
 }

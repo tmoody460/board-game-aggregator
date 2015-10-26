@@ -7,16 +7,22 @@ using System.Xml;
 
 namespace BoardGameAggregator.Engines
 {
-    public static class BoardGameGeekEngine
+    public class BoardGameGeekEngine : IBoardGameGeekEngine
     {
+        private IRestApiEngine engine;
 
-        public static XmlNodeList RequestSearchResults(string gameName)
+        public BoardGameGeekEngine(IRestApiEngine engine)
+        {
+            this.engine = engine;
+        }
+        
+        public XmlNodeList RequestSearchResults(string gameName)
         {
             try
             {
                 string requestUrl = "https://www.boardgamegeek.com/xmlapi/search?search=" + gameName;
 
-                XmlDocument searchResultsXmlDoc = RestApiEngine.CallRestApi(requestUrl);
+                XmlDocument searchResultsXmlDoc = engine.CallRestApi(requestUrl);
 
                 XmlNode games = searchResultsXmlDoc.SelectSingleNode("boardgames");
 
@@ -30,12 +36,12 @@ namespace BoardGameAggregator.Engines
             }
         }
 
-        public static XmlNode RequestGameDetails(long id)
+        public XmlNode RequestGameDetails(long id)
         {
             try { 
                 string requestUrl = "https://boardgamegeek.com/xmlapi/boardgame/" + id + "?&stats=1";
 
-                XmlDocument gameInfoXmlDoc = RestApiEngine.CallRestApi(requestUrl);
+                XmlDocument gameInfoXmlDoc = engine.CallRestApi(requestUrl);
 
                 XmlNode gameNode = gameInfoXmlDoc.SelectSingleNode("boardgames").SelectSingleNode("boardgame");
 

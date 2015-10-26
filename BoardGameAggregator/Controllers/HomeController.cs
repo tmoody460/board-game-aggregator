@@ -1,5 +1,6 @@
 ﻿using BoardGameAggregator.Managers;
 using BoardGameAggregator.Models;
+using BoardGameAggregator.Repositories;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,17 @@ namespace BoardGameAggregator.Controllers
 {
     public class HomeController : Controller
     {
-        private SystemContext db = new SystemContext();
+        private IUnitOfWork unitOfWork;
+        private IBoardGameManager boardGameManager;
+        private IBoardGameGeekInfoManager bggInfoManager;
+
+        public HomeController(IUnitOfWork unitOfWork, IBoardGameGeekInfoManager bggInfoManager, IBoardGameManager boardGameManager)
+        {
+            this.unitOfWork = unitOfWork;
+            this.bggInfoManager = bggInfoManager;
+            this.boardGameManager = boardGameManager;
+
+        }
 
         public ActionResult Index()
         {
@@ -25,30 +36,28 @@ namespace BoardGameAggregator.Controllers
             //int pageSize = 10;
             //var games = db.BoardGames.Include("Info").OrderBy(g => g.Name).ToPagedList(page, pageSize);
 
-            var games = db.BoardGames.Include("Info").OrderByDescending(g => g.Info.Rating).ToList();
+            var games = boardGameManager.GetBoardGamesSortByRank();
             return Json(games, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public JsonResult SaveGame(BoardGame game)
         {
-            db.Entry(game).State = EntityState.Modified;
-            db.SaveChanges();
-
+            boardGameManager.SaveGame(game);
+            unitOfWork.Save();
             return Json(true);
         }
 
         [HttpPost]
         public JsonResult DeleteGame(Guid id)
         {
-            var game = db.BoardGames.Find(id);
-            db.Entry(game).Reference(p => p.Info).Load();
+            var game = boardGameManager.FindGame(id);
+            var bggInfo = bggInfoManager.FindInfo(game.Info.Id);
 
-            var bggInfo = db.BoardGameGeekInfo.Find(game.Info.Id);
+            bggInfoManager.RemoveInfo(bggInfo);
+            boardGameManager.RemoveGame(game);
 
-            db.BoardGameGeekInfo.Remove(bggInfo);
-            db.BoardGames.Remove(game);
-            db.SaveChanges();
+            unitOfWork.Save();
 
             return Json(true);
         }
@@ -57,8 +66,7 @@ namespace BoardGameAggregator.Controllers
         {
             try
             {
-                BoardGameGeekInfoManager manager = new BoardGameGeekInfoManager();
-                var games = manager.LookupBoardGameList(name);
+                var games = bggInfoManager.LookupBoardGameList(name);
                 return Json(games, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
@@ -72,48 +80,13 @@ namespace BoardGameAggregator.Controllers
         {
             try
             {
-                BoardGameGeekInfoManager manager = new BoardGameGeekInfoManager();
-                var description = manager.LookupBoardGameDetails(id);
+                var description = bggInfoManager.LookupBoardGameDetails(id);
                 return Json(description, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
                 return Json(e.Message, JsonRequestBehavior.AllowGet);
             }
-        }
-
-        public JsonResult LookUpGame(string name)
-        {
-            BoardGameGeekInfo gameInfo = null;
-            BoardGame game = new BoardGame();
-
-            try
-            {
-                BoardGameGeekInfoManager manager = new BoardGameGeekInfoManager();
-                gameInfo = manager.LookUpBoardGame(name);
-            }
-            catch (Exception e)
-            {
-                return Json(e.Message, JsonRequestBehavior.AllowGet);
-            }
-
-            // Unless custom name is set, use BGG's
-            game.Name = gameInfo.Name;
-            game.Id = Guid.NewGuid();
-            game.Rating = 0;
-            game.Played = false;
-            game.Owned = false;
-            game.Comments = "";
-            game.Info = gameInfo;
-
-            gameInfo.Id = Guid.NewGuid();
-            gameInfo.BoardGame = game;
-
-            db.BoardGames.Add(game);
-            db.BoardGameGeekInfo.Add(gameInfo);
-            db.SaveChanges();
-
-            return Json(game, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult AddGame(long id)
@@ -123,8 +96,7 @@ namespace BoardGameAggregator.Controllers
 
             try
             {
-                BoardGameGeekInfoManager manager = new BoardGameGeekInfoManager();
-                gameInfo = manager.LookUpBoardGame(id);
+                gameInfo = bggInfoManager.LookUpBoardGame(id);
             }
             catch (Exception e)
             {
@@ -143,12 +115,11 @@ namespace BoardGameAggregator.Controllers
             gameInfo.Id = Guid.NewGuid();
             gameInfo.BoardGame = game;
 
-            db.BoardGames.Add(game);
-            db.BoardGameGeekInfo.Add(gameInfo);
-            db.SaveChanges();
+            bggInfoManager.AddInfo(gameInfo);
+            boardGameManager.AddGame(game);
+            unitOfWork.Save();
 
             return Json(game, JsonRequestBehavior.AllowGet);
         }
-
     }
 }
