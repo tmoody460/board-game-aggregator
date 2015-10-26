@@ -194,7 +194,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\board-game-vm.js" />
+    <Content Include="Scripts\app-vm.js" />
+    <Content Include="Scripts\board-game-vms.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\boardgameaggregator.pubxml" />
